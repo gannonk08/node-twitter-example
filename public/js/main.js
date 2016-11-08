@@ -13,6 +13,9 @@ function ($scope, socket) {
   socket.on('newTweet', function (tweet) {
     $scope.tweet = tweet.text;
     $scope.user = tweet.user.screen_name;
+    $scope.location = tweet.place.full_name;
+    $scope.user = tweet.user.screen_name;
+    $scope.center =
     //parse source from payload
     var source = tweet.source.split('>')[1].split('<')[0].split(' ')[2];
     //all hashtags in the tweet
@@ -21,7 +24,7 @@ function ($scope, socket) {
     });
 
     //check source and increment for #trump tweets
-    if (hashtags.includes('trump')) {
+    if (hashtags.includes('trump', 'donaldtrump', 'makeamericagreatagain')) {
       switch (source) {
         case 'iPhone': $scope.trumpData[0]++;
         break;
@@ -36,7 +39,7 @@ function ($scope, socket) {
     }
 
     //check source and increment for #strongertogether tweets
-    else if (hashtags.includes('strongertogether')) {
+    else if (hashtags.includes('strongertogether','hillaryclinton')) {
       switch (source) {
         case 'iPhone': $scope.clintonData[0]++;
         break;
@@ -79,3 +82,8 @@ twitterStream.factory('socket', function ($rootScope) {
     }
   };
 });
+
+
+function getCenter([[bl_X, bl_Y], [tl_X, tl_Y], [tr_X, tr_Y], [br_X, br_Y]]) {
+    return [((tl_Y+bl_Y)/2).toPrecision(7), ((br_X + bl_X)/2).toPrecision(7)]
+}
